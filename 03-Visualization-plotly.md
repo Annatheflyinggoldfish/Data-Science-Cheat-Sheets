@@ -1,15 +1,15 @@
 # 🚀 Plotly Express (px) 速查表
 
-> 💡 Plotly Express 参数命名规律：data_frame=df, x='列名', y='列名', color='分类列名'（相当于 Seaborn 的 hue）
+- 💡 Plotly Express 参数命名规律：data_frame=df, x='列名', y='列名', color='分类列名'（相当于 Seaborn 的 hue）
 
 ### Plotly 生产环境工程红线与避坑
 **性能死穴：散点图超过 20 万行时，浏览器直接假死卡死**
-> 原因：Plotly 的底层是用 SVG 渲染每一个数据点的。如果你的 DataFrame 达到几十万行，它就要在网页里强行塞入几十万个 DOM 节点，会让你的 Jupyter 乃至电脑浏览器瞬间内存溢出。
-> 解法：当数据量极大时，使用专门优化过的 px.scatter_gl() 代替 px.scatter()。它底层调用的是 WebGL 硬件加速（利用显卡去画点），渲染 100 万个点只需 0.5 秒，纵滑如丝。
+- 原因：Plotly 的底层是用 SVG 渲染每一个数据点的。如果你的 DataFrame 达到几十万行，它就要在网页里强行塞入几十万个 DOM 节点，会让你的 Jupyter 乃至电脑浏览器瞬间内存溢出。
+- 解法：当数据量极大时，使用专门优化过的 px.scatter_gl() 代替 px.scatter()。它底层调用的是 WebGL 硬件加速（利用显卡去画点），渲染 100 万个点只需 0.5 秒，纵滑如丝。
 
 **数据联动陷阱：图表没有跟着 Pandas 链式命名自动改标题**
-> 原因：Plotly 默认会直接抓取你的 DataFrame 的列名作为坐标轴标签。如果你清洗出来的列名叫 avg_latency_hours，图表上就会直接大剌剌地打印出这个难看的英文变量名。
-> 解法：在任何 px. 函数中，塞入 labels=字典 参数进行一秒翻译，不需要为了画图专门去改原始 DataFrame 的列名：
+- 原因：Plotly 默认会直接抓取你的 DataFrame 的列名作为坐标轴标签。如果你清洗出来的列名叫 avg_latency_hours，图表上就会直接大剌剌地打印出这个难看的英文变量名。
+- 解法：在任何 px. 函数中，塞入 labels=字典 参数进行一秒翻译，不需要为了画图专门去改原始 DataFrame 的列名：
 ```python
 fig = px.line(
     df, x="month", y="sales",
