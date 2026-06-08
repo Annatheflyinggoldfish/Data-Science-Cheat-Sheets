@@ -278,5 +278,49 @@ COMMIT;    -- 提交
 ROLLBACK;  -- 回滚（需先 SET autocommit = 0;）
 ```
 
+## 在Jupyter里使用SQL
+```python
+!pip install pandas 
+
+!pip install ipython-sql prettytable  
+
+import prettytable 
+
+prettytable.DEFAULT = 'DEFAULT' #目的是为了让出来的表格看着好看一点 
+
+ 
+
+import pandas as pd 
+
+import csv,sqlite3 
+
+con = sqlite3.connect("FinalDB.db") 
+
+cur = con.cursor() 
+
+ 
+
+!pip install ipython-sql 
+
+%load_ext sql 
+
+ 
+
+df1 = pd.read_csv("文件链接") 
+
+df2 = pd.read_csv("链接") 
+
+df3 = pd.read_csv("链接") 
+
+df1.to_sql("CHICAGO_CENSUS_DATA",con,if_exists="replace",index=False,method="multi") 
+
+df2.to_sql("CHICAGO_PUBLIC_SCHOOLS",con,if_exists="replace",index=False,method="multi") 
+
+df3.to_sql("CHICAGO_CRIME_DATA",con,if_exists="replace",index=False,method="multi") 
+
+ 
+
+%sql sqlite:///FinalDB.db 
+```
 ---
 
