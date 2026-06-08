@@ -758,8 +758,8 @@ df['new'] = df.apply(lambda row: row['a'] + row['b'], axis=1)
 df.duplicated().sum()
 df.duplicated(subset=['id']).sum()
 
-# 检查数据一致性
+# 检查数据一致性，语法：assert 条件, "报错信息"
 assert df['id'].nunique() == len(df), "id 有重复"
-assert df['score'].between(0, 100).all(), "score 存在超范围值"
+assert df['score'].between(0, 100).all(), "score 存在超范围值" # 检查该列的值是否在闭区间(0,100)以内，是否所有的值都为True，如果不是的话，打印"score 存在超范围值"
 ```
 
