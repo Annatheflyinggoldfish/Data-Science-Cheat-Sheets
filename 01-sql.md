@@ -57,8 +57,18 @@ SELECT col FROM t1 WHERE col > ALL (SELECT col FROM t2 WHERE cond); -- 大于集
 SELECT col, COUNT(col2) 
 FROM table
 GROUP BY col
-HAVING COUNT(col2) > 5                     -- ⚠️ 聚合函数的过滤必须用 HAVING 
+HAVING COUNT(col2) > 5                     -- ⚠️ 聚合函数的过滤必须用 HAVING
 ORDER BY COUNT(col2) DESC;
+
+-- 空值处理与控制流
+COALESCE(col1, col2, '默认值') -- 返回第一个非 NULL 的值（极其强大）
+IFNULL(col, 0)                -- 如果是 NULL 则变 0 (MySQL 独有)
+
+
+-- 修改表结构
+ALTER TABLE table ADD column_name datatype;
+ALTER TABLE table MODIFY column_name new_type;
+ALTER TABLE table DROP COLUMN column_name;
 ```
 
 ---
@@ -270,10 +280,3 @@ ROLLBACK;  -- 回滚（需先 SET autocommit = 0;）
 
 ---
 
-## 11. 修改表结构
-
-```sql
-ALTER TABLE table ADD column_name datatype;
-ALTER TABLE table MODIFY column_name new_type;
-ALTER TABLE table DROP COLUMN column_name;
-```
