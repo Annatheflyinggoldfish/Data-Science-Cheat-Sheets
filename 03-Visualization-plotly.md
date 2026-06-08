@@ -33,7 +33,8 @@ pio.templates.default = "plotly_white"
 # 1. 读入数据
 # df = pd.read_csv('your_actual_business_data.csv')
 ```
-## 2. 四大核心流派
+## 核心流派
+## 1. 关系流派 (Relational)：探寻变量联动
 ### 动态散点图 (px.scatter) —— 带趋势拟合与气泡大小控制
 ```python
 # 业务场景：分析“广告预算”与“销售额”的因果相关性，并自动绘制 OLS 线性回归线
