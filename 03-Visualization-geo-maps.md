@@ -63,3 +63,43 @@ HeatMap(heat_data, radius=10, blur=15, min_opacity=0.4).add_to(m_heatmap)
 m_heatmap.save('olist_order_density_heatmap.html')
 ```
 
+## 案例1：教科书
+```python
+import folium
+from folium.plugins import MarkerCluster
+
+# 1. 实例化底图（以澳大利亚为中心）
+Aus_map = folium.Map(location=[-25, 135], zoom_start=4, tiles="OpenStreetMap")
+
+# 2. 完美的教科书解法：声明一个标准的要素图层组（修正了原案例的命名空间 Bug）
+# 赋予它一个明文 name，未来可以直接在网页右上角显示开关
+fire_layer_group = folium.FeatureGroup(name="澳大利亚历史野火爆发分布点")
+
+# 3. 注入工业级降维武器：在图层组内部，实例化一个自动聚合簇容器
+# disableClusteringAtZoom: 当放大到 10 级时解开聚合，展现真实散点
+# maxClusterRadius: 聚合半径，数值越大，周围的点越容易被吸进去
+marker_cluster = MarkerCluster(
+    disableClusteringAtZoom=10,
+    maxClusterRadius=50
+).add_to(fire_layer_group) # 🌟 核心跨界套娃：把聚合簇挂在教科书图层组上
+
+# 4. 遍历数据并高效填充
+for lat, lng, lab in zip(reg.Lat, reg.Lon, reg.region):
+    # 工业级优化：摒弃普通的 CircleMarker，改用带有地理图标质感、且能完美被 Cluster 吞噬的 Marker
+    folium.Marker(
+        location=[lat, lng],
+        popup=folium.Popup(f"<b>区域:</b> {lab}<br><b>纬度:</b> {lat}", max_width=200), # 规范化弹窗 HTML
+        icon=folium.Icon(color='red', icon='fire', icon_color='white', prefix='fa') # 莫兰迪红+火苗图标
+    ).add_to(marker_cluster) # 🌟 顺次塞进聚合簇，而不是直接拍到底图上
+
+# 5. 把装满了高性能聚合簇的“教科书图层组”一次性挂载到底图上
+Aus_map.add_child(fire_layer_group)
+
+# 6. 降维打击的终极灵魂：注入图层控制器
+# 此时网页右上角会出现一个高级勾选框，用户一勾，几万个聚合点瞬间消失；再一勾，秒速重新加载
+folium.LayerControl(collapsed=False).add_to(Aus_map)
+
+# 7. 导出商业级静态网页
+# Aus_map.save("australia_wildfire_advanced_map.html")
+```
+
