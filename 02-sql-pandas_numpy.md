@@ -735,4 +735,3 @@ assert df['id'].nunique() == len(df), "id 有重复"
 assert df['score'].between(0, 100).all(), "score 存在超范围值"
 ```
 
-You are out of free messages until 9:40 
