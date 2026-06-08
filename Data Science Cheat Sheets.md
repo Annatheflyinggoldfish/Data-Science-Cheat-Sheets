@@ -6,7 +6,7 @@
 * [01-SQL 基础与进阶](./01-sql.md) - 多表连接(JOIN)、窗口函数、复杂嵌套查询
 
 ### 2. 🐼 数据清洗与核心计算
-* [02-Pandas & Numpy 核心](./02-pandas_numpy.md) - 数据过滤、分组聚合(groupby)、矩阵运算与 Polars 对比
+* [02-SQL/Pandas/Numpy 对照](./02-sql-pandas_numpy.md) - 数据过滤、分组聚合(groupby)、矩阵运算与 Polars 对比
 
 ### 3. 📉 数据可视化（从静态到交互）
 * [03-Matplotlib 基础绘图](./03-Visualization_matplotlib.md) - 折线图/柱状图模板、图表元素调优与标注(annotate)
