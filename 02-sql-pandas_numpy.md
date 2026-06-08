@@ -754,6 +754,26 @@ df['new'] = df['a'] + df['b']
 # ✅ 次选：apply（比 iterrows 快，比向量化慢）
 df['new'] = df.apply(lambda row: row['a'] + row['b'], axis=1)
 
+# 实例：
+result = (
+    df.copy()
+    .assign(                                      # 用asign新增三列net_salary，allowance，final_income
+        net_salary=lambda x: x['salary'] * 0.8, 
+
+        allowance=lambda x:
+            x['age'].apply(
+                lambda age: 500 if age >= 40 else 200   # 对新列allowance逐个apply函数
+            ),
+
+        final_income=lambda x:
+            x['net_salary'] + x['allowance']
+    )
+    .sort_values(
+        by='final_income',
+        ascending=False
+    )
+)
+
 # 检查重复
 df.duplicated().sum()
 df.duplicated(subset=['id']).sum()
