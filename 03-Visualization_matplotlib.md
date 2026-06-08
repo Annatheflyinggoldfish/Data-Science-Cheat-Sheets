@@ -40,7 +40,7 @@ plt.show()
 ```
 
 ## 3. 基础图表
-# 折线图 (ax.plot) —— 适合看趋势
+### 折线图 (ax.plot) —— 适合看趋势
 ```python
 # 核心参数：color(颜色), linestyle(线型), linewidth(线宽), marker(数据点样式)
 ax.plot(x, y, color='crimson', linestyle='-', linewidth=2, marker='o', markersize=4)
@@ -49,7 +49,7 @@ ax.plot(x, y, color='crimson', linestyle='-', linewidth=2, marker='o', markersiz
 # 常见标记(marker)：'o' 圆点, 's' 方块, '^' 上三角, '*' 五角星
 ```
 
-# 条形图 / 柱状图 (ax.bar / ax.barh) —— 适合比大小
+### 条形图 / 柱状图 (ax.bar / ax.barh) —— 适合比大小
 ```python
 categories = ['A', 'B', 'C', 'D']
 values = [40, 70, 25, 85]
@@ -61,7 +61,7 @@ ax.bar(categories, values, color='skyblue', edgecolor='black', width=0.6)
 ax.barh(categories, values, color='salmon', edgecolor='black', height=0.6)
 ```
 
-# 散点图 (ax.scatter) —— 适合看相关性分布
+### 散点图 (ax.scatter) —— 适合看相关性分布
 ```python
 x_data = np.random.randn(100)
 y_data = np.random.randn(100)
@@ -72,7 +72,7 @@ ax.scatter(x_data, y_data, s=sizes, c='purple', alpha=0.6, edgecolor='white')
 ```
 
 
-# 直方图 (ax.hist) —— 适合看单变量数据分布
+### 直方图 (ax.hist) —— 适合看单变量数据分布
 ```python
 data = np.random.normal(100, 15, 1000)
 
@@ -80,7 +80,7 @@ data = np.random.normal(100, 15, 1000)
 ax.hist(data, bins=30, color='seagreen', edgecolor='black', alpha=0.7)
 ```
 
-# 饼图 (ax.pie) —— 适合看整体占比（如：各品类市场份额、预算开销结构）
+### 饼图 (ax.pie) —— 适合看整体占比（如：各品类市场份额、预算开销结构）
 ```python
 # df = pd.read_csv('market_share.csv')
 # 假设数据有两列：'产品品类' (手机, 电脑, 配件...) 和 '市场份额' (35.5, 24.1...)
