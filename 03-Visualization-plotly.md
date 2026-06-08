@@ -1,6 +1,6 @@
 # 🚀 Plotly Express (px) 速查表
 
-####💡 Plotly Express 参数命名规律：data_frame=df, x='列名', y='列名', color='分类列名'（相当于 Seaborn 的 hue）
+💡 Plotly Express 参数命名规律：data_frame=df, x='列名', y='列名', color='分类列名'（相当于 Seaborn 的 hue）
 
 ### Plotly 生产环境工程红线与避坑
 **性能死穴：散点图超过 20 万行时，浏览器直接假死卡死**
