@@ -144,7 +144,7 @@ df.sample(frac=0.1)           # 抽 10%
 | RANK | `RANK() OVER (ORDER BY col DESC)` | `df['col'].rank(method='min', ascending=False)` |
 | DENSE_RANK | `DENSE_RANK() OVER (ORDER BY col DESC)` | `df['col'].rank(method='dense', ascending=False)` |
 | ROW_NUMBER | `ROW_NUMBER() OVER (ORDER BY col)` | `df['col'].rank(method='first')` |
-| PARTITION BY | `RANK() OVER (PARTITION BY g ORDER BY col)` | `df.groupby('g')['col'].rank(method='dense')` |
+| PARTITION BY | `DENSE_RANK() OVER (PARTITION BY g ORDER BY col)` | `df.groupby('g')['col'].rank(method='dense')` |
 
 ```python
 df.sort_values('col', ascending=False, inplace=True)
@@ -313,8 +313,8 @@ df.dropna(thresh=3)                      # 保留非空值 ≥ 3 的行
 df.fillna(0)                             # 填充为固定值
 df['col'].fillna(df['col'].mean())       # 填充为均值
 df['col'].fillna(df['col'].median())     # 填充为中位数
-df['col'].fillna(method='ffill')         # 前向填充
-df['col'].fillna(method='bfill')         # 后向填充
+df['col'].ffill()                        # 前向填充
+df['col'].bfill()                        # 后向填充
 df.fillna({'col1': 0, 'col2': 'unknown'})  # 各列分别填充
 
 # 检测无穷值（数值运算后可能出现）
@@ -474,7 +474,7 @@ df[df['date'].between('2023-01-01', '2023-12-31')]
 | ROW_NUMBER | `ROW_NUMBER() OVER (...)` | `df['col'].rank(method='first')` |
 | LAG(n) | `LAG(col, n) OVER (ORDER BY date)` | `df['col'].shift(n)` |
 | LEAD(n) | `LEAD(col, n) OVER (ORDER BY date)` | `df['col'].shift(-n)` |
-| PARTITION BY | `... OVER (PARTITION BY g ORDER BY col)` | `df.groupby('g')['col'].transform(...)` |
+| PARTITION BY | `DENSE_RANK() OVER (PARTITION BY g ORDER BY col)` | `df.groupby('g')['col'].rank(method='dense')` |
 
 ```python
 # 累计
@@ -697,23 +697,26 @@ df.memory_usage(deep=True).sum()
 df['status'] = df['status'].astype('category')
 
 # 链式操作（避免多次复制）
-result = (
-    df
+df_result = (
+    df.copy()
     .dropna(subset=['salary'])
     .query("dept == 'Engineering'")
-    .assign(tax=lambda x: x['salary'] * 0.2)
+    .assign(net_salary = lambda x: x['salary'] * 0.8) # 算出净工资
     .groupby('level')
-    .agg(avg_net=('salary', lambda x: (x * 0.8).mean()))
+    .agg(avg_net=('net_salary', 'mean'))              # 直接纯净聚合
     .reset_index()
     .sort_values('avg_net', ascending=False)
 )
 
-# 调试中间步骤（pipe）
-def peek(df, msg=''):
-    print(msg, df.shape)
-    return df
+# 🛠️ 管道调试（使用 pipe 在链式调用中途拦截，打印中间形态维度）
+def peek_shape(dataframe, stage_msg=''):
+    print(f"[{stage_msg}] Shape: {dataframe.shape}")
+    return dataframe
 
-result = df.pipe(peek, 'after load').query("age > 0").pipe(peek, 'after filter')
+df_debug = df.pipe(peek_shape, '原始载入').query("salary > 0").pipe(peek_shape, '清洗过滤后')
+
+# ⚠️ 速度性能红线：坚决禁止写 for index, row in df.iterrows()！
+# 优先进行矢量化直接求和（速度快千倍）；次选调用快速高效的 df.apply(lambda x: ..., axis=1)。
 
 # 性能对比
 # ❌ 慢：逐行 iterrows
