@@ -715,13 +715,38 @@ def peek_shape(dataframe, stage_msg=''):
 
 df_debug = df.pipe(peek_shape, '原始载入').query("salary > 0").pipe(peek_shape, '清洗过滤后')
 
+# 实战例子
+df_result = (
+    df.copy()
+    # 查看原始数据
+    .pipe(peek_shape, '原始数据')
+
+    # 删除空工资
+    .dropna(subset=['salary'])
+    .pipe(peek_shape, '删除空工资')
+
+    # 删除负工资
+    .query("salary > 0")
+    .pipe(peek_shape, '删除异常工资')
+
+    # 只看工程部
+    .query("dept == 'Engineering'")
+    .pipe(peek_shape, '筛选工程部')
+
+    # 计算税后工资
+    .assign(net_salary=lambda x: x['salary'] * 0.8)
+    .pipe(peek_shape, '新增净工资')
+
+    # 按级别统计平均净工资
+    .groupby('level')
+    .agg(avg_net_salary=('net_salary', 'mean'))
+
+    .reset_index()
+    .sort_values('avg_net_salary', ascending=False)
+)
+
 # ⚠️ 速度性能红线：坚决禁止写 for index, row in df.iterrows()！
 # 优先进行矢量化直接求和（速度快千倍）；次选调用快速高效的 df.apply(lambda x: ..., axis=1)。
-
-# 性能对比
-# ❌ 慢：逐行 iterrows
-for idx, row in df.iterrows():
-    df.at[idx, 'new'] = row['a'] + row['b']
 
 # ✅ 快：向量化
 df['new'] = df['a'] + df['b']
