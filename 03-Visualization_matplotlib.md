@@ -29,10 +29,28 @@ ax.plot(x, y, label='Sine Wave', color='#1f77b4', linewidth=2, linestyle='--')
 # 4. 精细修饰画板（坐标轴、标题、图例、网格）
 ax.set_title('Standard Line Plot', fontsize=14, fontweight='bold', pad=15)
 ax.set_xlabel('Time (s)', fontsize=12)
-ax.set_ylabel('Amplitude', fontsize=12)
+ax.set_ylabel('Amplitude', fontsize=12
+
 ax.set_xlim(0, 10)                           # 严格控制横坐标范围
 ax.grid(True, linestyle=':', alpha=0.6)      # 开启网格线（虚线，半透明）
 ax.legend(loc='upper right', frameon=True)   # 开启图例并显示外框
+
+plt.axhline(y=500, color='r', linestyle='--', label='风险警戒线') # ➖ 横向贯穿线（比如设定 Olist 物流延迟死线）
+plt.axvline(x=2020, color='g', linestyle=':', label='疫情暴发分水岭') # 垂直贯穿线（用来做前后对比）
+
+plt.xticks(range(1980, 2024), rotation=90, fontsize=9) # rotation=90 让文字强行垂直站立，防止年份横向连成一片
+plt.xticks(range(1980, 2024, 5), rotation=45) # 进阶小技巧：如果年份太密，可以使用步长（Step），比如每 5 年显示一个刻度。45度斜着躺，更好看。
+
+# 加文字：plt.text(X坐标, Y坐标, "文本内容", 其他样式)
+plt.text(1982, 650, '1981-82 Recession', color='red', weight='bold', fontsize=10)
+
+# 带有指示箭头的文本高亮（Annotation）
+plt.annotate(
+    '1981-82 经济衰退最低点', 
+    xy=(1982, 650),         # 🎯 箭头指向的真实数据点坐标
+    xytext=(1985, 1000),     # 📝 文本文字摆放的坐标（错开位置，防止遮挡）
+    arrowprops=dict(facecolor='black', shrink=0.05, width=1, headwidth=6) # 🏹 箭头样式
+)
 
 # 5. 紧凑布局并导出/显示
 plt.tight_layout()                           # 自动防止标签、标题被边缘裁剪
