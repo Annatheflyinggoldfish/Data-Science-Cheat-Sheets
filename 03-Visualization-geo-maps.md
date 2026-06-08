@@ -34,6 +34,9 @@ for idx, row in df.iterrows():
         tooltip=f"点击查看 {row['city']} 详情",          # 鼠标悬浮时的提示
         icon=folium.Icon(color=marker_color, icon='info-sign')
     ).add_to(m)
+
+# 4. 导出为网页（在浏览器双击打开就是震撼的动态地图）
+m.save('olist_warehouse_map.html')
 ```
 
 ### 业务高频订单密集度热力图 (HeatMap)
@@ -60,6 +63,3 @@ HeatMap(heat_data, radius=10, blur=15, min_opacity=0.4).add_to(m_heatmap)
 m_heatmap.save('olist_order_density_heatmap.html')
 ```
 
-# 4. 导出为网页（在浏览器双击打开就是震撼的动态地图）
-m.save('olist_warehouse_map.html')
-```
