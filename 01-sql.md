@@ -1,12 +1,15 @@
-# SQL Cheat Sheet
+# 🗄️ SQL 核心功能速查表
+
+> 💡 本表语法以 **MySQL 8.0+** 为主，兼容主流关系型数据库（如 PostgreSQL）。
 
 ---
 
 ## 1. 查询数据
 
+### 🔍 基础查询与过滤
 ```sql
 SELECT * FROM table_name;
-SELECT DISTINCT column FROM table_name;
+SELECT DISTINCT column FROM table_name; -- 针对指定列去重
 
 -- 条件过滤
 SELECT col1, col2 FROM table WHERE condition;
@@ -15,44 +18,46 @@ SELECT * FROM table WHERE cond1 OR cond2;
 SELECT * FROM table WHERE NOT condition;
 
 -- 排序
-SELECT * FROM table ORDER BY col ASC;
-SELECT * FROM table ORDER BY col1 ASC, col2 DESC;
+SELECT * FROM table ORDER BY col ASC;                     -- 升序
+SELECT * FROM table ORDER BY col1 ASC, col2 DESC;         -- 多列排序
 
--- 限制行数（MySQL）
-SELECT col FROM table LIMIT offset, count;
+-- 限制行数（MySQL 语法）
+SELECT col FROM table LIMIT 5;            -- 取前 5 行
+SELECT col FROM table LIMIT 10, 5;        -- 跳过前 10 行，取 5 行 (Offset, Count)
 
--- 模式匹配
+-- 模糊匹配 (LIKE)
 SELECT col FROM table WHERE col LIKE 'a%';    -- 以 a 开头
 SELECT col FROM table WHERE col LIKE '%a';    -- 以 a 结尾
 SELECT col FROM table WHERE col LIKE '%or%';  -- 包含 or
 SELECT col FROM table WHERE col LIKE '_r%';   -- 第二位是 r
 SELECT col FROM table WHERE col LIKE 'a_%_%'; -- a 开头且长度 ≥ 3
 
--- 范围 / 多值
-SELECT col FROM table WHERE col BETWEEN val1 AND val2;
+-- 范围 / 多值判断
+SELECT col FROM table WHERE col BETWEEN val1 AND val2;  -- 闭区间 [val1, val2]
 SELECT col FROM table WHERE col IN (val1, val2, val3);
-SELECT col FROM table WHERE col IN (SELECT col FROM table2);
+SELECT col FROM table WHERE col IN (SELECT col FROM table2); -- 子查询集合
 
--- NULL 判断
+-- NULL 判断 (⚠️ 不能用 = NULL)
 SELECT * FROM table WHERE col IS NULL;
 SELECT * FROM table WHERE col IS NOT NULL;
 
 -- 别名
 SELECT col AS alias FROM table;
-SELECT col1, col2 + ', ' + col3 AS full_name FROM table;
+SELECT CONCAT(col1, ', ', col2) AS full_name FROM table; -- 通用字符串拼接
 
 -- 合并结果集
-SELECT col FROM t1 UNION SELECT col FROM t2;      -- 去重
-SELECT col FROM t1 UNION ALL SELECT col FROM t2;  -- 保留重复
+SELECT col FROM t1 UNION SELECT col FROM t2;      -- 合并并去重（效率较低）
+SELECT col FROM t1 UNION ALL SELECT col FROM t2;  -- 合并保留重复（推荐，效率高）
 
--- 子查询条件
-SELECT col FROM t1 WHERE col > ANY (SELECT col FROM t2 WHERE cond);
-SELECT col FROM t1 WHERE col > ALL (SELECT col FROM t2 WHERE cond);
+-- 子查询多值条件
+SELECT col FROM t1 WHERE col > ANY (SELECT col FROM t2 WHERE cond); -- 大于集合中任意一个（等价于大于最小值）
+SELECT col FROM t1 WHERE col > ALL (SELECT col FROM t2 WHERE cond); -- 大于集合中所有个（等价于大于最大值）
 
--- 分组 + 聚合过滤
-SELECT col, COUNT(col2) FROM table
+-- 分组 + 聚合后过滤
+SELECT col, COUNT(col2) 
+FROM table
 GROUP BY col
-HAVING COUNT(col2) > 5
+HAVING COUNT(col2) > 5                     -- ⚠️ 聚合函数的过滤必须用 HAVING 
 ORDER BY COUNT(col2) DESC;
 ```
 
