@@ -2,7 +2,7 @@
 
 
 ## 工作表
-
+```
                     原始数据
                        ↓ df.info() / describe() / corr()
                     EDA 探索 (相关性与异方差初步诊断)
@@ -26,7 +26,7 @@
                  最终金牌管道模型确定
                        ↓ final_model.fit(X, y) 在全盘上复训
                  持久化上线: joblib.dump(final_model, 'production_model.pkl')
-
+```
 ---
 
 ## 目录
