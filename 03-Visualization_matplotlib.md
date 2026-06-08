@@ -51,14 +51,53 @@ ax.plot(x, y, color='crimson', linestyle='-', linewidth=2, marker='o', markersiz
 
 ### 条形图 / 柱状图 (ax.bar / ax.barh) —— 适合比大小
 ```python
-categories = ['A', 'B', 'C', 'D']
-values = [40, 70, 25, 85]
-
 # 纵向柱状图
-ax.bar(categories, values, color='skyblue', edgecolor='black', width=0.6)
+
+fig, ax = plt.subplots(figsize=(7, 4), dpi=100)
+bars = ax.bar(df['区域'], df['销售额'], color='#1f77b4', width=0.5)
+
+# 核心现代语法：一键给所有柱子自动贴标 (Matplotlib 3.4+ 引入)
+ax.bar_label(
+    bars, 
+    fmt='¥%.0f',          # 格式化文本：数字前面加个人民币符号，且保留0位小数
+    padding=3,            # 标签距离柱子顶端向上空出 3 个像素像素
+    fontsize=10, 
+    color='dimgray'
+)
+
+# 顺手把左边多余的轴和刻度隐藏，让图表极简现代化
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.tight_layout()
+plt.show()
 
 # 横向条形图（展示长文本分类名称时的首选，极其优雅）
 ax.barh(categories, values, color='salmon', edgecolor='black', height=0.6)
+```
+
+### 双 Y 轴图（.twinx()）
+```python
+# df = pd.read_csv('marketing_data.csv')
+
+fig, ax1 = plt.subplots(figsize=(8, 4), dpi=100)
+
+# 1. 绘制左边轴：广告投入（用柱状图展示）
+ax1.bar(df['月份'], df['广告投入'], color='gainsboro', label='广告投入(元)')
+ax1.set_ylabel('广告投入额 (元)', color='gray')
+ax1.tick_params(axis='y', labelcolor='gray')
+
+# 2. ⚡ 核心：克隆出右边轴（共用 X 轴）
+ax2 = ax1.twinx() 
+
+# 3. 绘制右边轴：转化率（用折线图展示，这样两者绝对不会互相侵占位置）
+ax2.plot(df['月份'], df['转化率'], color='crimson', marker='o', linewidth=2, label='转化率(%)')
+ax2.set_ylabel('转化率 (%)', color='crimson')
+ax2.tick_params(axis='y', labelcolor='crimson')
+
+ax1.set_title('广告投入与转化率双轴对比分析图', fontweight='bold', pad=15)
+plt.tight_layout()
+plt.show()
 ```
 
 ### 散点图 (ax.scatter) —— 适合看相关性分布
@@ -70,7 +109,6 @@ sizes = np.random.rand(100) * 100  # 动态控制点的大小
 # 核心参数：s(点的大小), c(点的颜色), alpha(透明度，高密度重叠时必设)
 ax.scatter(x_data, y_data, s=sizes, c='purple', alpha=0.6, edgecolor='white')
 ```
-
 
 ### 直方图 (ax.hist) —— 适合看单变量数据分布
 ```python
@@ -96,7 +134,7 @@ ax.pie(
 ax.set_title('2026年各产品线市场营收份额占比', fontsize=13, fontweight='bold')
 ```
 
-## 3. 多子图组合布局
+## 4. 多子图组合布局
 ```python
 # 创建一个 2 行 2 列，共计 4 个画板的大画布
 fig, axes = plt.subplots(2, 2, figsize=(12, 10), sharex=False, sharey=False)
@@ -117,4 +155,4 @@ axes[1, 1].set_title('Plot [1,1]')
 plt.tight_layout()
 ```
 
-
+## 4. 三大实战操作
