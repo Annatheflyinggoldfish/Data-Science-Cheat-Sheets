@@ -1015,9 +1015,9 @@ app.layout = html.Div(children=[html.H1('Australia Wildfire Dashboard',
 #layout ends
 #TASK 4: Add the Ouput and input components inside the app.callback decorator.
 #Place to add @app.callback Decorator
-@app.callback([Output(component_id='plot1', component_property='children'),
-               Output(component_id='plot2', component_property='children')],
-               [Input(component_id='region', component_property='value'),
+@app.callback([Output(component_id='plot1', component_property='children'), # 🎯 目的地 1：找单号为 'plot1' 的箱子，修改它的子内容，也就是html.Div([ ], id='plot1') 中的[]
+               Output(component_id='plot2', component_property='children')], 
+               [Input(component_id='region', component_property='value'), # 对应RadioItems里面定义的id和value
                 Input(component_id='year', component_property='value')])
 #TASK 5: Add the callback function.   
 #Place to define the callback function .
