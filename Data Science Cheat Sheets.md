@@ -9,6 +9,7 @@
 * [02-SQL/Pandas/Numpy 对照](./02-sql-pandas_numpy.md) - 数据过滤、分组聚合(groupby)、矩阵运算与 Polars 对比
 
 ### 3. 📉 数据可视化（从静态到交互）
+* **参考网页：[The Python Graph Gallery](https://python-graph-gallery.com/)**
 * [03-Matplotlib 基础绘图](./03-Visualization_matplotlib.md) - 折线图/柱状图模板、图表元素调优与标注(annotate)
 * [04-Seaborn 高级统计可视化](./03-Visualization-seaborn.md) - 分布图(Displot)、相关性热力图(Heatmap)、分类图
 * [05-Folium & 地图可视化](./03-Visualization-geo-maps.md) - 地理数据散点图、空间热力图 (含 Plotly Mapbox 推荐)
