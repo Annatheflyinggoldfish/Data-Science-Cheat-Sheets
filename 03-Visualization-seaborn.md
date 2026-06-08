@@ -174,3 +174,52 @@ g = sns.lmplot(
 g.fig.suptitle('不同业务线：客户跟进频次与签约金额拟合回归矩阵', y=1.05, fontweight='bold')
 plt.show()
 ```
+
+## 实战看板
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+sns.set_theme(style="whitegrid", context="notebook")
+# df = pd.read_csv('olist_ecommerce_data.csv')
+
+# 2. 🌟 核心：用“字符串矩阵”直接规划你的看板排版！
+# 字符相同代表合并。比如第一行全写 '趋势'，代表这张图直接横向通铺占满一整行
+看板布局 = [
+    ['趋势图', '趋势图', '趋势图'],
+    ['分布图', '对比图', '回归图']
+]
+
+# 3. 一键一揽子创建大画布(fig)与画板字典(axs)
+fig, axs = plt.subplot_mosaic(看板布局, figsize=(14, 9), dpi=100)
+fig.suptitle('2026年度 Olist 电商核心业务多维交叉诊断看板', fontsize=16, fontweight='bold', y=0.96)
+
+# --- ➊ 绘制顶端通铺：关系流派 (折线图) ---
+# 此时直接通过你刚才命名的字符串 key '趋势图' 就能精准调用对应的画板
+sns.lineplot(data=df, x='月份', y='销售额', hue='产品大类', marker='o', ax=axs['趋势图'])
+axs['趋势图'].set_title('💡 核心品类月度营收走势大趋势', loc='left', fontsize=12, fontweight='bold')
+
+# --- ➋ 绘制左下角：分布流派 (小提琴图) ---
+sns.violinplot(data=df, x='地区', y='延迟耗时_小时', palette='pastel', ax=axs['分布图'])
+axs['分布图'].set_title('⏱️ 各区域物流交付延迟(Latency)特征分布', loc='left', fontsize=12, fontweight='bold')
+
+# --- ➌ 绘制中下部：分类流派 (条形图) ---
+sns.barplot(data=df, x='产品大类', y='利润率', palette='muted', ax=axs['对比图'])
+axs['对比图'].set_title('📊 各品类真实利润率对比(含误差线)', loc='left', fontsize=12, fontweight='bold')
+axs['对比图'].tick_params(axis='x', labelrotation=15) # 顺手把标签旋转15度防止重叠
+
+# --- ➍ 绘制右下角：回归分析流派 (拟合线图) ---
+# 注意：regplot 是画板级函数，支持 ax= 参数
+sns.regplot(
+    data=df, x='折扣力度', y='复购率', 
+    scatter_kws={'alpha':0.5, 'color':'#4A7BB0'}, 
+    line_kws={'color':'#D16666'}, 
+    ax=axs['回归图']
+)
+axs['回归图'].set_title('📉 促销折扣与复购率因果回归预测', loc='left', fontsize=12, fontweight='bold')
+
+# 4. 完美收工
+plt.tight_layout()
+plt.show()
+```
