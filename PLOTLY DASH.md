@@ -1,30 +1,12 @@
-# ============================================================
-#         PLOTLY DASH 完整 CHEAT SHEET + 实战案例
-#         适合：刚学完基础，细节还不太清楚的同学
-# ============================================================
+# PLOTLY DASH 完整 CHEAT SHEET + 实战案例
+- Dash = Flask（服务器）+ React（前端）+ Plotly（图表）
 
-# ────────────────────────────────────────────────────────────
-# 第一部分：CHEAT SHEET（核心概念速查）
-# ────────────────────────────────────────────────────────────
+- 工作流程：
+- Layout(页面长啥样)  ───> Callback(交互逻辑) ───>  Output(更新内容)  
+      
 
-# ╔══════════════════════════════════════════════════════════╗
-# ║  1. DASH 是什么？                                         ║
-# ╚══════════════════════════════════════════════════════════╝
-#
-#  Dash = Flask（服务器）+ React（前端）+ Plotly（图表）
-#  你写的是 Python，Dash 帮你自动转成网页
-#
-#  工作流程：
-#  ┌─────────┐    ┌──────────┐    ┌──────────┐
-#  │ Layout  │───>│ Callback │───>│  Output  │
-#  │(页面长啥样)│    │(交互逻辑) │    │(更新内容) │
-#  └─────────┘    └──────────┘    └──────────┘
-
-
-# ╔══════════════════════════════════════════════════════════╗
-# ║  2. 必须导入的包                                          ║
-# ╚══════════════════════════════════════════════════════════╝
-
+## 2. 必须导入的包
+```python
 import dash
 from dash import html        # HTML 标签组件，比如 div、h1、p
 from dash import dcc         # Dash Core Components，比如下拉框、图表、滑块
@@ -35,43 +17,41 @@ from dash.dependencies import Input, Output, State
 import plotly.express as px  # 快速画图
 import plotly.graph_objects as go  # 更精细的画图控制
 import pandas as pd
+```
 
+## 3. 创建 APP
+```python
+#__name__ 告诉 Dash 当前文件在哪，用来找静态资源
+app = dash.Dash(__name__)
 
-# ╔══════════════════════════════════════════════════════════╗
-# ║  3. 创建 APP                                             ║
-# ╚══════════════════════════════════════════════════════════╝
+# suppress_callback_exceptions=True：
+# 当 callback 里引用的组件还不存在于 layout 时不报错
+# 比如动态生成的组件）
+app.config.suppress_callback_exceptions = True
+```
 
-# app = dash.Dash(__name__)
-#   __name__ 告诉 Dash 当前文件在哪，用来找静态资源
-#   suppress_callback_exceptions=True：
-#     当 callback 里引用的组件还不存在于 layout 时不报错
-#     （比如动态生成的组件）
-# app.config.suppress_callback_exceptions = True
-
-
-# ╔══════════════════════════════════════════════════════════╗
-# ║  4. LAYOUT 速查 —— html 组件                             ║
-# ╚══════════════════════════════════════════════════════════╝
-#
-#  html.Div(children=[...], id='my-div', className='box',
-#           style={'color': 'red', 'fontSize': 16})
+## 4. LAYOUT 速查 —— html 组件
+```python
+html.Div(children=[...], id='my-div', className='box',
+         style={'color': 'red', 'fontSize': 16})
 #  ↑ 相当于 HTML 的 <div>，是最常用的容器
-#
+
 #  注意：CSS 属性名用驼峰法！
 #    HTML:   font-size  →  Python: fontSize 或 'font-size'（字符串形式也行）
 #    HTML:   text-align →  Python: textAlign
-#
-#  常用 html 组件：
-#  ┌──────────────────┬────────────────────────────┐
-#  │ html.H1/H2/H3    │ 标题                        │
-#  │ html.P           │ 段落                        │
-#  │ html.Div         │ 容器（最常用）               │
-#  │ html.Br          │ 换行                        │
-#  │ html.Hr          │ 分隔线                      │
-#  │ html.Span        │ 行内容器                    │
-#  │ html.Button      │ 按钮                        │
-#  │ html.A           │ 超链接                      │
-#  └──────────────────┴────────────────────────────┘
+```
+
+-  常用 html 组件：
+>  ┌──────────────────┬────────────────────────────┐
+>  │ html.H1/H2/H3    │ 标题                        │
+>  │ html.P           │ 段落                        │
+>  │ html.Div         │ 容器（最常用）               │
+>  │ html.Br          │ 换行                        │
+>  │ html.Hr          │ 分隔线                      │
+>  │ html.Span        │ 行内容器                    │
+>  │ html.Button      │ 按钮                        │
+>  │ html.A           │ 超链接                      │
+>  └──────────────────┴────────────────────────────┘
 
 
 # ╔══════════════════════════════════════════════════════════╗
