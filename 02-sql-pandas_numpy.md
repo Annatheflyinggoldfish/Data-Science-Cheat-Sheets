@@ -224,6 +224,9 @@ df = df[df['age'] > 0]    # 通过过滤删除不满足条件的行
 | COUNT DISTINCT | `COUNT(DISTINCT col)` | `df['col'].nunique()` |
 | SUM | `SUM(col)` | `df['col'].sum()` |
 | AVG | `AVG(col)` | `df['col'].mean()` |
+| 中位数 | — | `df['col'].median()` |
+| 众数 | — | `df['col'].mode()[0]` |
+| 分位数 | — | `df['col'].quantile(0.25)` |
 | MIN/MAX | `MIN(col)` / `MAX(col)` | `df['col'].min()` / `.max()` |
 | STD | `STDDEV(col)` | `df['col'].std()` |
 | GROUP BY | `GROUP BY col` | `df.groupby('col')` |
