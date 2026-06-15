@@ -88,6 +88,7 @@ df.describe()                    # count/mean/std/min/25%/50%/75%/max
 df.describe(include='all')       # 含非数值列
 df['col'].value_counts()         # 频次，默认降序
 df['col'].value_counts(normalize=True)  # 频率（占比）
+df['col'].value_counts(dropna=False) # 保留空值
 df['col'].unique()               # 所有唯一值（数组）
 df['col'].nunique()              # 唯一值数量
 df.corr()                        # 数值列相关性矩阵
