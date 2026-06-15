@@ -260,6 +260,14 @@ df.groupby('dept').filter(lambda x: x['salary'].mean() > 50000)
 # 类似 SQL 窗口函数
 df['dept_avg'] = df.groupby('dept')['salary'].transform('mean')
 df['pct_of_dept'] = df['salary'] / df.groupby('dept')['salary'].transform('sum')
+
+# 按值分组创造新列贴标签
+df['ExperienceLevel'] = pd.cut(
+    df['YearsCodePro'],
+    bins=[0, 4, 8, 16, 52],
+    labels=['Junior', 'Mid-level', 'Senior', 'Expert'],
+    right=False # 默认right=True表示左开右闭。 right=False改成左闭右开，这里取值就是0、1、2、3, 4、5、6、7, 8、9...15， 
+)
 ```
 
 ---
