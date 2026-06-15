@@ -296,6 +296,7 @@ df1.join(df2, how='left')
 | 操作 | SQL | Pandas |
 |------|-----|--------|
 | 检测空值 | `IS NULL` | `df.isna()` / `df.isnull()` |
+| 检测非空值 | `IS NOT NULL` | `df.notna()` / `df.notnull()` |
 | 统计空值 | — | `df.isna().sum()` |
 | 删除空值行 | `WHERE col IS NOT NULL` | `df.dropna()` |
 | 填充空值 | `COALESCE(col, 0)` | `df.fillna(0)` |
