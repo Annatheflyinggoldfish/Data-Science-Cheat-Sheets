@@ -85,6 +85,7 @@ df.to_parquet('output.parquet')
 ```python
 df.head()
 df.info()                        # 类型 + 非空数量 + 内存
+df.info(verbose=True, show_counts=True)  # verbose=True 会打破 100 列的限制，强制所有列排出来。show_counts=True 会强迫它把每一列NaN算出来。
 df.describe()                    # count/mean/std/min/25%/50%/75%/max
 df.describe(include='all')       # 含非数值列
 df['col'].value_counts()         # 频次，默认降序
