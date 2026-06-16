@@ -104,6 +104,15 @@ df.duplicated().sum()         # 重复行数量
 df.corr()
 df[['col1', 'col2', 'col3']].corr()  # 只看感兴趣的几列
 
+# 相关性热力图例子
+cols = ['Age_num', 'YearsCodePro', 'ConvertedCompYearly', 'JobSat']
+corr = df[cols].corr()  # pandas默认用pairwise完整数据计算，每对变量各自dropna
+sns.heatmap(corr, annot=True, fmt='.2f', cmap='coolwarm')
+
+df[cols].corr(method='pearson')   # 默认
+df[cols].corr(method='spearman')  # Spearman
+df[cols].corr(method='kendall')   # Kendall
+
 # 精确计算：Pearson相关系数 + p值
 # p值<0.05：这个相关性在统计上是显著的（不太可能是巧合）
 from scipy import stats
