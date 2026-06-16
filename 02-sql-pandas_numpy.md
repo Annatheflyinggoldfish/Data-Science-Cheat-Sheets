@@ -80,6 +80,7 @@ df.to_parquet('output.parquet')
 | 唯一值 | `SELECT DISTINCT col FROM t;` | `df['col'].unique()` |
 | 唯一值数量 | `SELECT COUNT(DISTINCT col) FROM t;` | `df['col'].nunique()` |
 | 频次统计 | `SELECT col, COUNT(*) FROM t GROUP BY col;` | `df['col'].value_counts()` |
+| 频次统计 | `SELECT col, COUNT(*) FROM t GROUP BY col;` | `df['col'].value_counts()` |
 
 ```python
 df.head()
@@ -158,6 +159,11 @@ df.nsmallest(5, 'salary')   # 最小 5 行
 
 # 分组排名
 df['rank'] = df.groupby('dept')['salary'].rank(method='dense', ascending=False)
+
+# 取前10的最大值
+df.sort_values().head(10) 硬性截断，只给你 10 条数据。
+pivot.sum().nlargest(10, keep='all')：# 如果有三个一样的90分，那么会把这三个 90 分的全带上，最终返回 12 条数据。
+# 注意：.nlargest(10) 只能用于数值型数据（Series 或 DataFrame 的某几列）
 ```
 
 ---
