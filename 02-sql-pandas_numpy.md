@@ -233,6 +233,17 @@ df = df[df['age'] > 0]    # 通过过滤删除不满足条件的行
 | GROUP BY | `GROUP BY col` | `df.groupby('col')` |
 | HAVING | `HAVING COUNT(*) > 5` | `.filter(lambda x: len(x) > 5)` |
 | 多聚合 | `SELECT col, SUM(a), AVG(b) ...` | `.agg({'a':'sum','b':'mean'})` |
+| 行数统计（含NaN） | `COUNT(*)` | `df.groupby('col').size()` |
+| 行数统计（非NaN） | `COUNT(col)` | `df.groupby('col').count()` |
+| 分组频率统计 | — | `df.groupby(['a','b']).size().reset_index(name='Count')` |
+| 分组广播回原行 | 窗口函数 | `df.groupby('col')['val'].transform('mean')` |
+| 数值区间分组 | `CASE WHEN` | `pd.cut(df['col'], bins=[...], labels=[...])` |
+| 分位数自动分组 | — | `pd.qcut(df['col'], q=4, labels=[...])` |
+| 列表拆行 | — | `df.explode('col')` |
+| 多值列拆分 | — | `df['col'].str.split(';')` + `.explode()` |
+| 交叉计数 | — | `pd.crosstab(df['a'], df['b'])` |
+| 长转宽（唯一值） | `PIVOT` | `df.pivot(index, columns, values)` |
+| 长转宽（有重复） | `PIVOT` | `df.pivot_table(values, index, columns, aggfunc)` |
 
 ```python
 # 基本聚合
@@ -250,8 +261,16 @@ df.groupby(['dept', 'gender']).agg(
     max_salary=('salary', 'max')
 ).reset_index()
 
+# size() vs count()
+# size()：数每组有多少行，包含NaN，返回Series
+df.groupby('col').size()
+# count()：数每组每列非NaN的值，返回DataFrame（每列都算）
+df.groupby('col').count()
+# 典型用法：统计频率后重命名
+df.groupby(['Country', 'Language']).size().reset_index(name='Count')
+
 # 自定义聚合函数
-df.groupby('dept')['salary'].agg(lambda x: x.quantile(0.9))  # 90 分位数
+df.groupby('dept')['salary'].agg(lambda x: x.quantile(0.9))  # 90分位数
 
 # HAVING 等价：过滤分组后的结果
 df.groupby('dept').filter(lambda x: x['salary'].mean() > 50000)
@@ -261,13 +280,40 @@ df.groupby('dept').filter(lambda x: x['salary'].mean() > 50000)
 df['dept_avg'] = df.groupby('dept')['salary'].transform('mean')
 df['pct_of_dept'] = df['salary'] / df.groupby('dept')['salary'].transform('sum')
 
-# 按值分组创造新列贴标签
+# pd.cut：按数值区间分组，创建新列
+# right=False → 左闭右开 [0,5), [5,10)；right=True（默认）→ 左开右闭 (0,5]
 df['ExperienceLevel'] = pd.cut(
     df['YearsCodePro'],
-    bins=[0, 4, 8, 16, 52],
-    labels=['Junior', 'Mid-level', 'Senior', 'Expert'],
-    right=False # 默认right=True表示左开右闭。 right=False改成左闭右开，这里取值就是0、1、2、3, 4、5、6、7, 8、9...15， 
+    bins=[0, 5, 10, 20, 52],
+    labels=['0-5', '5-10', '10-20', '>20 years'],
+    right=False
 )
+# pd.qcut：按分位数自动分组（每组人数相等）
+df['SalaryQuartile'] = pd.qcut(df['salary'], q=4, labels=['Q1','Q2','Q3','Q4'])
+
+# explode：把列表型单元格拆成多行，其他列值自动复制
+# 适用场景：一列里存了多个值，如 "Python;JavaScript;SQL"
+df_exploded = df.assign(
+    Language=df['LanguageHaveWorkedWith'].str.split(';')
+).explode('Language')
+# 注意：explode后index会重复，需要时用reset_index(drop=True)重置
+
+# pivot：长格式转宽格式（要求index+columns组合唯一，否则报错）
+df.pivot(index='Country', columns='Language', values='Count')
+
+# pivot_table：长格式转宽格式（有重复值时自动聚合，更健壮）
+df.pivot_table(
+    values='Count',
+    index='Country',
+    columns='Language',
+    aggfunc='sum',
+    fill_value=0
+)
+
+# crosstab：两个分类变量交叉计数（无需提前groupby）
+pd.crosstab(df['Employment'], df['RemoteWork'])
+# 按行总数排序
+crosstab.loc[crosstab.sum(axis=1).sort_values(ascending=False).index]
 ```
 
 ---
