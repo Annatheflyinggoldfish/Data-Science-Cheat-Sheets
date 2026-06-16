@@ -199,6 +199,12 @@ df.columns = df.columns.str.lower().str.replace(' ', '_')  # 批量规范列名
 df.loc[df['status'] == 'inactive', 'score'] = 0  # 条件更新
 df['col'].replace({'Yes': 1, 'No': 0}, inplace=True)
 df['col'] = df['col'].map({'a': 1, 'b': 2})       # map 替换
+
+#替换的例子
+df['YearsCodePro'] = df['YearsCodePro'].replace({
+    'Less than 1 year': 0,
+    'More than 50 years': 51
+})
 ```
 
 ---
