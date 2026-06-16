@@ -424,6 +424,11 @@ df['col'].str.extract(r'(\d{4})')            # 提取第一个匹配
 df['col'].str.extractall(r'(\d+)')           # 提取所有匹配
 df['col'].str.findall(r'\d+')               # 返回所有匹配的列表
 df['col'].str.match(r'^[A-Za-z]+$')         # 是否完整匹配（布尔）
+
+# 检查是否有字符串残留（有些数据集里会用 "Less than 1 year" 或 "More than 50 years"），将其转换为数值
+df['Years'] = pd.to_numeric(df['Years'], errors='coerce') # 转换失败的就替换会NaN
+df = df.dropna(subset=['Years']) # 再次清理转换失败的 NaN
+
 ```
 
 ---
