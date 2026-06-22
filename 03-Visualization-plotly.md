@@ -93,6 +93,52 @@ fig = px.bar(
 fig.show()
 ```
 
+### 饼图
+```python
+fig = px.pie(
+    df,
+    names='分类列',           # 饼图各扇区的标签
+    values='数值列',          # 各扇区的大小
+    title='图表标题',         # 标题
+
+    # 配色
+    color_discrete_sequence=['#4E79A7', '#F28E2B', '#E15759', '#76B7B2', '#59A14F'],
+    
+    # 扇区标签显示内容
+    # 'percent' / 'label' / 'value' / 'label+percent' / 'label+value+percent'
+    hole=0,                   # 0=饼图，0.4=甜甜圈图
+)
+
+fig.update_traces(
+    textposition='inside',    # 'inside' / 'outside' / 'auto'
+    textinfo='label+percent', # 扇区上显示的内容
+    pull=[0.1, 0, 0, 0, 0],  # 某个扇区向外拉出，突出显示
+)
+
+fig.update_layout(
+    legend_title='图例标题',
+    showlegend=True,
+)
+
+fig.show()
+
+#实例
+df_tools = (
+    df['NEWCollabToolsHaveWorkedWith']
+    .dropna()
+    .str.split(';')
+    .explode()
+    .str.strip()
+    .value_counts()
+    .head(5)
+    .reset_index()
+    .rename(columns={'NEWCollabToolsHaveWorkedWith': 'Tools', 'count': 'Count'})
+)
+
+fig = px.pie(df_tools, names='Tools', values='Count')
+fig.show()
+```
+
 ### 交互式小提琴图 (px.violin) —— 均值与密度合体
 ```python
 fig = px.violin(
