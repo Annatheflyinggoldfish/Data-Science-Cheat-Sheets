@@ -477,6 +477,12 @@ fig.update_yaxes(title_text="右轴标题", secondary_y=True)
 ## 15. 颜色与配色方案
 
 ```python
+# 传入配色：color_continuous_scale
+fig = px.scatter(df, x="X", y="Y", color="数值列",
+                 color_continuous_scale=px.colors.sequential.Viridis)
+# color传的列是数字 → color_continuous_scale（渐变色）
+# color传的列是字符串/类别 → color_discrete_sequence（离散色，每个类别一个颜色）
+
 # ── 离散配色（分类数据）─────────────────────
 px.colors.qualitative.Plotly          # Plotly默认10色
 px.colors.qualitative.Set1            # 高饱和度9色
