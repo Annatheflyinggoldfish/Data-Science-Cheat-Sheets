@@ -510,6 +510,7 @@ fig = px.bar(df, color="Category",
                  "类别B": "#F28E2B",
                  "类别C": "#E15759",
              })
+color_discrete_sequence=['#2ca02c'] # # 单色：
 
 # ── 常用专业配色（手动）──────────────────────
 # Tableau 10：#4E79A7 #F28E2B #E15759 #76B7B2 #59A14F #EDC948 #B07AA1 #FF9DA7 #9C755F #BAB0AC
