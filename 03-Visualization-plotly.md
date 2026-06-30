@@ -517,6 +517,8 @@ color_discrete_sequence=['#2ca02c'] # # 单色：
 # NHS蓝：#005EB8
 # 莫兰迪系：#B5C4B1 #D4A5A5 #A8C5DA #F2D0A4 #C3B1D6
 ```
+<img width="680" height="126" alt="image" src="https://github.com/user-attachments/assets/ca894d87-622b-4a59-a12d-4554019fe17c" />
+
 
 ---
 
