@@ -236,5 +236,4 @@ print(model.summary())
 
 **永远不要单独报告p-value。** 样本量大的时候,几乎任何非零差异都会统计显著,这是预期之内的正常现象,不是什么了不起的发现。永远要把显著性检验和对应的effect size放在一起看,用effect size(而不是p-value)来判断这个结果在实际中到底重不重要。
 
-**求职场景下常用的一句英文总结,可以直接背下来用:**
 "Statistical significance tells you whether an effect exists; effect size tells you whether it matters. With large administrative datasets, p-values become significant very easily, so I always pair them with an effect size before drawing conclusions."
