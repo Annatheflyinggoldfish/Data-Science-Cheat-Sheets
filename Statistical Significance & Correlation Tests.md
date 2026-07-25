@@ -15,6 +15,7 @@
 | **p-value / p值** | 关联是否真实存在? | 是——样本越大越容易显著,跟效应大小无关 |
 | **Effect size / 效应量** | 关联有多强/多大? | 否——是标准化后的指标,可跨研究比较 |
 
+
 ---
 
 ## 一、分类变量 vs 分类变量 (Categorical vs Categorical) —— 比较比例/计数
@@ -229,6 +230,52 @@ print(model.summary())
 | 两个连续变量,单调关系 | 连续 vs 连续 | 斯皮尔曼相关 Spearman correlation | rho |
 | 结果变量~多个预测变量(连续) | 混合 | 线性回归 Linear regression | R² |
 | 结果变量~多个预测变量(二元结果) | 混合 | 逻辑回归 Logistic regression | Pseudo-R² / odds ratios |
+
+# Effect Size 取值范围与解读方法 (Effect Size Ranges & Interpretation)
+
+补充笔记:不同的effect size(效应量),取值范围和阈值并不统一,不能都按0-1去理解。读法逻辑一致(数值越大代表关联/差异越强),但量纲和上限不同,不能跨类型直接比较数字大小。
+
+---
+
+## 一、有界在 0–1 之间的(接近"百分比"直觉)
+
+- **Cramér's V** —— 0到1。1表示完全关联,0表示完全独立。用于列联表(contingency table),行列数都>2时。
+- **Phi coefficient** —— 0到1。2×2表专用,本质是Cramér's V的特例。
+- **R² (R-squared / 决定系数)** —— 0到1,表示模型解释了多少比例的方差(variance)。最接近"百分比"直觉:R²=0.3就是"这个模型解释了30%的变异"。
+- **Eta-squared (η² / eta平方)** —— 0到1,逻辑跟R²很像(ANOVA本身是回归的特殊形式),表示组间差异占总变异的比例。
+
+**r (Pearson/Spearman correlation coefficient)** —— 严格说是 **-1到1**,不是0到1,因为相关有方向(正相关/负相关)。看强弱时通常取绝对值 |r|。
+
+---
+
+## 二、没有固定上限的(不能套0-1去读)
+
+- **Cohen's d** —— 没有固定上限,理论上可以是任意正数(实际研究里很少超过2)。衡量的是"两组均值差,以标准差为单位算出的距离",不是比例。0.2/0.5/0.8这几个阈值是经验上常引用的分界,不是理论边界。
+- **Odds ratio (优势比)** —— 范围是0到正无穷,**1代表"没有差异"**(不是0)。odds ratio=2意味着某事件发生几率是对照组的2倍;odds ratio=0.5意味着只有一半。判断标准是"离1有多远",不是"离0有多远"。
+- **卡方统计量本身 (chi-square value)** —— 完全没有固定范围,大小取决于自由度(degrees of freedom)和样本量,**不能单独当effect size使用**。
+
+---
+
+## 三、速查表
+
+| Effect Size | 取值范围 | "无效应"对应值 | 常见阈值(小/中/大) |
+|---|---|---|---|
+| Cramér's V | 0 ~ 1 | 0 | 0.1 / 0.3 / 0.5 |
+| Phi coefficient | 0 ~ 1 | 0 | 同Cramér's V |
+| r (Pearson / Spearman) | -1 ~ 1 | 0 | 0.1 / 0.3 / 0.5 |
+| R² | 0 ~ 1 | 0 | 0.01 / 0.09 / 0.25 |
+| Eta-squared (η²) | 0 ~ 1 | 0 | 0.01 / 0.06 / 0.14 |
+| Cohen's d | 0 ~ 无上限 | 0 | 0.2 / 0.5 / 0.8 |
+| Odds ratio | 0 ~ 无上限 | **1**(不是0) | 无统一标准,看离1有多远 |
+
+---
+
+## 需要注意的一点 (a caveat worth remembering)
+
+以上"小/中/大"这些阈值,本质上是**经验性的、领域惯例性的分界(empirical, field-specific conventions)**,不是数学上严格推导出来的规则。不同学科、不同应用场景,对"多大算大"的容忍度并不一样——比如社会科学和医学临床试验,对同一个Cohen's d值,判断"重不重要"的标准经常不同。
+
+**如果被问到"这个阈值哪来的",可以这样回答(英文可直接用):**
+"These thresholds are empirical conventions — most commonly attributed to Cohen — rather than fixed statistical rules. The right interpretation still depends on the context and field norms, not just the raw number."
 
 ---
 
