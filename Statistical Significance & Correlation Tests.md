@@ -14,6 +14,14 @@
 |---|---|---|
 | **p-value / p值** | 关联是否真实存在? | 是——样本越大越容易显著,跟效应大小无关 |
 | **Effect size / 效应量** | 关联有多强/多大? | 否——是标准化后的指标,可跨研究比较 |
+##
+| p-value range | 显著吗？ | Typical interpretation |
+|---------------|-------------------|----------------------|
+| p < .001 | Highly significant | Very strong evidence against H0 |
+| p < .01 | Significant | Strong evidence against H0 |
+| p < .05 | Significant | Sufficient evidence against H0 at the conventional threshold |
+| .05 < p < .10 | Marginally significant | Weak evidence; sometimes discussed but not conclusive |
+| p > .10 | Not significant | Insufficient evidence to reject H0 |
 
 
 ---
